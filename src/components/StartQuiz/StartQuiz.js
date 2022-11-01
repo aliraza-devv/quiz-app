@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { db } from "../../firebase";
-import BtnSubmit from "../Buttons/BtnSubmit";
 
 function StartQuiz() {
   const [question, setQuestion] = useState([]);
   const [result, setResult] = useState(0);
+  const [showResult, setShowResult] = useState(false);
 
-  const handleResultBtn = () => {
-    return <h1>{setResult(result)}</h1>;
-  };
+  function toggle() {
+    setShowResult(showResult => !showResult);
+  }
 
   function fetchAll(e) {
     e.preventDefault();
@@ -23,37 +23,41 @@ function StartQuiz() {
           });
         }
       });
-    console.log(question);
+  }
+
+  const handleScoreTrue = () => {
+    if (question.answer === "true" ) {
+      // setResult(result + 1);
+      console.log('true')
+    } else {
+      // setResult(result + 0);
+      console.log('not true')
+    }
+  }
+  const handleScoreFalse = () => {
+    if (question.answer === "false" ) {
+      setResult(result + 1);
+    } else {
+      setResult(result + 0);
+    }
   }
 
   return (
-    <div className="cardQuestion">
+    <div>
       <div>
         {question.map((ques) => {
           return (
-            <div key={ques.question}>
+            <div className="card" key={ques.question}>
               <h4>{ques.question}</h4>
               <button
                 className="btnTrue"
-                onClick={(e) => {
-                  if (e.target.value === question.answer) {
-                    setResult(result + 1);
-                  } else {
-                    setResult(result);
-                  }
-                }}
+                onClick={handleScoreTrue}
               >
                 True
               </button>
               <button
                 className="btnFalse"
-                onClick={(e) => {
-                  if (e.target.value === question.answer) {
-                    setResult(result + 1);
-                  } else {
-                    setResult(result);
-                  }
-                }}
+                onClick={handleScoreFalse}
               >
                 False
               </button>
@@ -63,9 +67,16 @@ function StartQuiz() {
       </div>
       <div className="flex">
         <button className="btnStart" onClick={fetchAll}>
-          <span className="label">Get Questions</span>
+          <span className="label">Start</span>
         </button>
-        <BtnSubmit onClick={handleResultBtn} title='Result' />
+        <button className="btnStart" onClick={toggle}>
+          <span className="label">result</span>
+        </button>
+        {showResult && (
+        <h1 className="result">
+          Your Result is: 4
+        </h1>
+      )}
       </div>
     </div>
   );

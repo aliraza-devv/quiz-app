@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase";
 import BtnSubmit from "../Buttons/BtnSubmit";
-import BtnStartQuiz from "../Buttons/BtnStartQuiz";
 
 function AddQuestions() {
   const [question, setQuestion] = useState();
